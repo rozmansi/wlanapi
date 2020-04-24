@@ -66,8 +66,8 @@ func (iil *InterfaceInfoList) Item(idx uint32) *InterfaceInfo {
 	}
 	addr := uintptr(unsafe.Pointer(iil))
 	addr += unsafe.Sizeof(InterfaceInfoList{})
-	iiArray := (*[(1 << 21) - 1]InterfaceInfo)(unsafe.Pointer(addr))
-	return &(*iiArray)[idx]
+	addr += unsafe.Sizeof(InterfaceInfo{}) * uintptr(idx)
+	return (*InterfaceInfo)(unsafe.Pointer(addr))
 }
 
 // Close frees the memory.

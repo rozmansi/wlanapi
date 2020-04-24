@@ -7,9 +7,19 @@ package wlanapi
 
 import (
 	"testing"
+	"unsafe"
 
 	"golang.org/x/sys/windows"
 )
+
+func TestStruct(t *testing.T) {
+	if unsafe.Sizeof(InterfaceInfo{}) != 532 {
+		t.Errorf("InterfaceInfo wrong size: %v", unsafe.Sizeof(InterfaceInfo{}))
+	}
+	if unsafe.Sizeof(InterfaceInfoList{}) != 8 {
+		t.Errorf("InterfaceInfoList wrong size: %v", unsafe.Sizeof(InterfaceInfoList{}))
+	}
+}
 
 func Test(t *testing.T) {
 	session, version, err := CreateClientSession(2)
@@ -29,12 +39,15 @@ func Test(t *testing.T) {
 
 	for i := uint32(0); i < ifaces.NumberOfItems; i++ {
 		ii := ifaces.Item(i)
+
+		t.Logf("Interface: %v, state: %v, GUID: %v",
+			ii.InterfaceDescription(),
+			ii.State,
+			ii.InterfaceGUID)
+
 		if ii.State == InterfaceStateNotReady {
 			continue
 		}
-
-		desc := ii.InterfaceDescription()
-		t.Logf("Interface: %v", desc)
 
 		err = session.SetProfileEAPXMLUserData(&ii.InterfaceGUID, "foobar", 0, "<foobar></foobar>")
 		if err == nil {

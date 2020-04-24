@@ -13,8 +13,24 @@ import (
 )
 
 func TestStruct(t *testing.T) {
+	if unsafe.Offsetof(InterfaceInfo{}.InterfaceGUID) != 0 {
+		t.Errorf("InterfaceInfo.InterfaceGUID wrong offset: %v", unsafe.Offsetof(InterfaceInfo{}.InterfaceGUID))
+	}
+	if unsafe.Offsetof(InterfaceInfo{}.interfaceDescription) != 16 {
+		t.Errorf("InterfaceInfo.interfaceDescription wrong offset: %v", unsafe.Offsetof(InterfaceInfo{}.interfaceDescription))
+	}
+	if unsafe.Offsetof(InterfaceInfo{}.State) != 528 {
+		t.Errorf("InterfaceInfo.State wrong offset: %v", unsafe.Offsetof(InterfaceInfo{}.State))
+	}
 	if unsafe.Sizeof(InterfaceInfo{}) != 532 {
 		t.Errorf("InterfaceInfo wrong size: %v", unsafe.Sizeof(InterfaceInfo{}))
+	}
+
+	if unsafe.Offsetof(InterfaceInfoList{}.NumberOfItems) != 0 {
+		t.Errorf("InterfaceInfoList.NumberOfItems wrong offset: %v", unsafe.Offsetof(InterfaceInfoList{}.NumberOfItems))
+	}
+	if unsafe.Offsetof(InterfaceInfoList{}.Index) != 4 {
+		t.Errorf("InterfaceInfoList.Index wrong offset: %v", unsafe.Offsetof(InterfaceInfoList{}.Index))
 	}
 	if unsafe.Sizeof(InterfaceInfoList{}) != 8 {
 		t.Errorf("InterfaceInfoList wrong size: %v", unsafe.Sizeof(InterfaceInfoList{}))

@@ -60,6 +60,8 @@ type InterfaceInfoList struct {
 }
 
 // Item returns interface info at the given index.
+//
+// Deprecated: Use InterfaceInfo method to obtain interface info as a slice.
 func (iil *InterfaceInfoList) Item(idx uint32) *InterfaceInfo {
 	if idx > iil.NumberOfItems {
 		panic("index out of range")
@@ -68,6 +70,13 @@ func (iil *InterfaceInfoList) Item(idx uint32) *InterfaceInfo {
 	addr += unsafe.Sizeof(InterfaceInfoList{})
 	addr += unsafe.Sizeof(InterfaceInfo{}) * uintptr(idx)
 	return (*InterfaceInfo)(unsafe.Pointer(addr))
+}
+
+// InterfaceInfo returns interface info.
+func (iil *InterfaceInfoList) InterfaceInfo() []InterfaceInfo {
+	addr := uintptr(unsafe.Pointer(iil))
+	addr += unsafe.Sizeof(InterfaceInfoList{})
+	return (*[(1 << 21) - 1]InterfaceInfo)(unsafe.Pointer(addr))[:iil.NumberOfItems]
 }
 
 // Close frees the memory.

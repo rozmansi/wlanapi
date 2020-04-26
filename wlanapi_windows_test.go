@@ -53,9 +53,7 @@ func Test(t *testing.T) {
 	}
 	defer ifaces.Close()
 
-	for i := uint32(0); i < ifaces.NumberOfItems; i++ {
-		ii := ifaces.Item(i)
-
+	for _, ii := range ifaces.InterfaceInfo() {
 		t.Logf("Interface: %v, state: %v, GUID: %v",
 			ii.InterfaceDescription(),
 			ii.State,

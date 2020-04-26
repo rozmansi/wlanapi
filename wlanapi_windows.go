@@ -40,10 +40,12 @@ type InterfaceInfo struct {
 	State                InterfaceState
 }
 
+// InterfaceDescription returns the description of the interface which is typically the adapter device name.
 func (ii *InterfaceInfo) InterfaceDescription() string {
 	return windows.UTF16ToString(ii.interfaceDescription[:])
 }
 
+// SetInterfaceDescription sets the description of the interface.
 func (ii *InterfaceInfo) SetInterfaceDescription(interfaceDescription string) error {
 	str, err := windows.UTF16FromString(interfaceDescription)
 	if err != nil {
